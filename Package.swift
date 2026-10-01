@@ -2,12 +2,16 @@
 import PackageDescription
 
 let package = Package(
-    name: "Latency Test",
+    name: "LatencyTest",
     platforms: [.iOS(.v17), .macOS(.v14)],
     products: [
-        .library(name: "Latency Test", targets: ["Latency Test"])
+        .library(name: "LatencyTestCore", targets: ["LatencyTestCore"]),
+        .library(name: "LatencyTestUI", targets: ["LatencyTestUI"]),
     ],
     targets: [
-        .target(name: "Latency Test", path: "Sources")
+        // Foundation-only domain logic; no SwiftUI so it also builds on Linux.
+        .target(name: "LatencyTestCore", path: "Sources/LatencyTestCore"),
+        .target(name: "LatencyTestUI", dependencies: ["LatencyTestCore"], path: "Sources/LatencyTestUI"),
+        .testTarget(name: "LatencyTestCoreTests", dependencies: ["LatencyTestCore"], path: "Tests/LatencyTestCoreTests"),
     ]
 )
